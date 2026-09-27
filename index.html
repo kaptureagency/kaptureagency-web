@@ -53,7 +53,7 @@ p.lead{font-size:clamp(1.05rem,2vw,1.4rem);max-width:640px;color:#3a3c3f}
 .cta-row{display:flex;gap:1rem;flex-wrap:wrap;margin-top:2.4rem}
 
 /* INTRO */
-#intro{position:fixed;inset:0;background:var(--charcoal);z-index:100;display:flex;align-items:center;justify-content:center;perspective:1400px;overflow:hidden;opacity:1;pointer-events:auto;transition:opacity .5s ease}
+#intro{position:fixed;inset:0;background:var(--charcoal);z-index:100;display:flex;align-items:center;justify-content:center;perspective:1400px;overflow:hidden;opacity:1;pointer-events:auto;transition:opacity .5s ease;will-change:transform,opacity}
 #intro-scene{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;transform-style:preserve-3d}
 #intro-logo{position:relative;z-index:3;width:min(50vw,480px);will-change:transform,opacity;transform-style:preserve-3d}
 
@@ -305,12 +305,12 @@ footer .bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1re
       <h2 class="reveal">MISMA MARCA.<br>DISTINTAS HISTORIAS.</h2>
       <div class="split">
         <div class="reveal">
-          <p class="lead">Compartir una marca no significa ser iguales. Cada centro tiene su equipo, su espacio, sus momentos y su personalidad. Y eso merece verse — sin perder la coherencia de marca que la central necesita mantener.</p>
+          <p class="lead">Compartir una marca no significa ser iguales. Cada centro tiene su equipo, su espacio, sus momentos y su personalidad. Y eso merece verse, respetando siempre la identidad y las directrices de la marca.</p>
           <div class="fr-grid" style="margin-top:2rem">
-            <div class="fr-item"><b>Una identidad, cien voces.</b><span>Cada centro publica contenido propio y reconocible, dentro de la misma línea editorial de marca.</span></div>
-            <div class="fr-item"><b>Cero dependencia del centro.</b><span>El equipo local solo graba lo que se le indica. Kapture planifica, edita y publica por todos.</span></div>
-            <div class="fr-item"><b>Un panel, toda la red.</b><span>La central ve qué se está publicando en cada centro, sin perseguir a nadie.</span></div>
-            <div class="fr-item"><b>Escala sin fricción.</b><span>Sumar un centro nuevo a la red no significa sumar otro dolor de cabeza de contenido.</span></div>
+            <div class="fr-item"><b>Una marca. Distintas historias.</b><span>Cada centro puede mostrar su propia realidad respetando la identidad, los recursos y las directrices de su marca.</span></div>
+            <div class="fr-item"><b>El centro se centra en lo suyo.</b><span>El equipo local solo necesita kapturar el material que le indicamos. Kapture se encarga de convertirlo en contenido.</span></div>
+            <div class="fr-item"><b>Coherencia de marca, también en local.</b><span>Kapture adapta la creación de contenido a las directrices y recursos de cada marca, conectando identidad corporativa y comunicación local.</span></div>
+            <div class="fr-item"><b>Varios centros. Un sistema.</b><span>Gestionar varios establecimientos no tiene por qué multiplicar el trabajo de redes. Kapture organiza el proceso y adapta el contenido a las necesidades de cada uno.</span></div>
           </div>
         </div>
         <div class="frame-visual reveal"><div></div><div></div><div></div><div></div></div>
@@ -348,7 +348,7 @@ footer .bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1re
       </div>
       <p class="reveal" style="margin-top:1.6rem;color:#6b6d70">¿Quieres ver cómo funcionaría Kapture en tu negocio o en tu red de franquicias?</p>
       <div class="contact-opts reveal">
-        <a class="btn frame-hover" href="https://wa.me/34000000000" target="_blank" rel="noopener">WhatsApp</a>
+        <a class="btn frame-hover" href="https://wa.me/34685378900" target="_blank" rel="noopener">WhatsApp</a>
         <a class="btn frame-hover" href="#form">Formulario</a>
       </div>
       <form class="mini reveal" id="form">
@@ -486,12 +486,15 @@ footer .bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1re
       logo.style.opacity = 1 - Math.max(0, (p - 0.5) / 0.18);
 
       var popIn = Math.min(1, Math.max(0, (p - 0.4) / 0.16));
-      var popOut = Math.min(1, Math.max(0, (p - 0.68) / 0.17));
-      var popOpacity = popIn * (1 - popOut);
-      pop.style.opacity = popOpacity.toFixed(3);
-      pop.style.transform = 'scale(' + (0.85 + popIn*0.15 - popOut*0.1).toFixed(3) + ')';
+      pop.style.opacity = popIn.toFixed(3);
+      pop.style.transform = 'scale(' + (0.85 + popIn*0.15).toFixed(3) + ')';
 
-      flash.style.opacity = p > 0.8 ? (Math.min(1, (p - 0.8) / 0.12) * 0.45 * (1 - Math.max(0, (p - 0.95) / 0.05))).toFixed(3) : 0;
+      // near the end, the whole intro (logo + question) slides up and off,
+      // as if the rest of the site rises up from underneath it
+      var liftStart = 0.8;
+      var liftP = raw > liftStart ? Math.min(1, (raw - liftStart) / (1 - liftStart)) : 0;
+      var liftEase = liftP*liftP*(3 - 2*liftP);
+      intro.style.transform = 'translateY(-' + (liftEase*100).toFixed(2) + 'vh)';
 
       document.body.classList.toggle('intro-done', p >= 0.995);
       if(header) header.classList.toggle('scrolled', y > introH + 40);
@@ -513,11 +516,22 @@ footer .bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1re
 
   var form = document.getElementById('form');
   if(form){
+    var SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwx6mYu_FGQASCPFxx4WNviLRERwNAlCYIDu_ES7bG7sXgJ3KurL5ARarSARFXX3SRpTQ/exec';
     form.addEventListener('submit', function(ev){
       ev.preventDefault();
       var btn = form.querySelector('button');
-      btn.textContent = '¡Gracias! Te contactamos pronto.';
-      form.reset();
+      var originalText = btn.textContent;
+      btn.textContent = 'Enviando...';
+      fetch(SHEET_ENDPOINT, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: new FormData(form)
+      }).catch(function(){ /* no-cors: no podemos leer la respuesta, asumimos éxito */ })
+        .finally(function(){
+          btn.textContent = '¡Gracias! Te contactamos pronto.';
+          form.reset();
+          setTimeout(function(){ btn.textContent = originalText; }, 4000);
+        });
     });
   }
 })();
