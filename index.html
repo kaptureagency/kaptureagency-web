@@ -215,6 +215,30 @@ body.intro-done #sticky-cta:not(.hide){transform:none}
 #sticky-cta .btn{padding:.75rem 1.3rem;font-size:.9rem;color:var(--ivory)}
 #sticky-cta .btn.solid{flex:1;max-width:320px;justify-content:center}
 @media (prefers-reduced-motion:reduce){#sticky-cta{transition:none}}
+/* --- móvil: menos ruido visual, más aire --- */
+@media(max-width:680px){
+  section{padding:12vw 6vw}
+  .eyebrow{margin-bottom:.8rem;font-size:.7rem}
+  h1{font-size:clamp(2.1rem,9.5vw,2.8rem);line-height:1.06}
+  h2{font-size:clamp(1.7rem,7.5vw,2.3rem)}
+  p.lead{font-size:1rem}
+  .ghost-k{display:none}
+  .grid-tex{background-image:none}
+  .chips{gap:.5rem}
+  .chip{padding:.45rem .8rem;font-size:.85rem}
+  .punch{font-size:1.15rem;margin-top:1.8rem}
+  .split .frame-visual{display:none}
+  .arrival{flex-direction:column;align-items:flex-start;padding:1.6rem}
+  .cta-row{gap:.7rem}
+  .btn{padding:.85rem 1.4rem;font-size:.88rem}
+  #sticky-cta{gap:.5rem;padding:.6rem 4vw calc(.6rem + env(safe-area-inset-bottom,0px))}
+  #sticky-cta .btn{padding:.65rem .9rem;font-size:.82rem}
+  #sticky-cta .btn.solid{flex:1.4}
+  .hero-more{display:block;margin-left:0!important;margin-top:.6rem}
+  form.mini.hero-form{gap:.9rem;margin-top:1.6rem}
+  .ba .col{padding:1.4rem}
+  .faq-item summary{font-size:.98rem}
+}
 </style>
 </head>
 <body>
